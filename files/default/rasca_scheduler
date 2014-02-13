@@ -1,0 +1,17 @@
+#!/usr/bin/ruby
+# Simple rasca scheduler
+# FIXME: rewrite with schedule on yaml files
+
+# alarmdir
+@alarmdir="/var/lib/modularit/alarms"
+
+if ARGV[0]
+  @priority=ARGV[0]
+else
+  puts "I need a priority!"
+  exit
+end
+
+Dir["#{@alarmdir}/#{@priority}/*-picacaller"].each do |file|
+  %x[#{file}]
+end

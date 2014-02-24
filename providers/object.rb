@@ -21,11 +21,21 @@ def whyrun_supported?
   true
 end
 
+# Returns the extension of the file depending on the format of content
+def extension
+  case new_resource.format
+    when "yaml"
+      "obj"
+    when "ruby"
+      "rb"
+    end
+end
+
 # Adds an object file to a check
 # If content attribute is given, it's used, else it will try to use a template with that name
 action :add do
   dir_name="#{node['rasca']['objdir']}/#{new_resource.check}"
-  file_name="#{new_resource.object_name}.obj"
+  file_name="#{new_resource.object_name}.#{extension}"
   # Create dir if needed
   unless ::File.directory?(dir_name)
     Chef::Log.info "Creating directory #{dir_name}"
@@ -39,11 +49,7 @@ action :add do
   end
   # If content is given, use it
   Chef::Log.info "Creating object file #{dir_name}/#{file_name}"
-  if new_resource.json
-    file "#{dir_name}/#{file_name}" do
-      content YAML.dump(JSON.parse(new_resource.json,:symbolize_names => true))
-    end
-  elsif new_resource.content
+  if new_resource.respond_to?("content")
     file "#{dir_name}/#{file_name}" do
       content new_resource.content
     end
@@ -58,7 +64,7 @@ action :add do
 end
 
 action :remove do
-  file_name="#{node['rasca']['objdir']}/#{new_resource.check}/#{new_resource.object_name}.obj"
+  file_name="#{node['rasca']['objdir']}/#{new_resource.check}/#{new_resource.object_name}.#{extension}"
   if ::File.exists?(file_name)
     Chef::Log.info "Removing #{file_name}"
     file file_name do

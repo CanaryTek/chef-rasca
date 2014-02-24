@@ -21,8 +21,10 @@ actions :add, :remove
 
 attribute :object_name, :kind_of => String, :name_attribute => true
 attribute :check, :kind_of => String, :required => true
+# Content
 attribute :content, :kind_of => String
-attribute :json, :kind_of => String
+# Format of content (yaml o ruby)
+attribute :format, :kind_of => String, :default => "yaml"
 
 def initialize(*args)
   super

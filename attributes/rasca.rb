@@ -8,7 +8,7 @@ default['nagios_name']=Chef::Config[:node_name]
 
 # Gem repo and version to install
 default['rasca']['gemrepo']="http://gems.canarytek.com/"
-default['rasca']['gem_version']="0.1.24"
+default['rasca']['gem_version']="0.1.25"
 
 # ModularIT directories
 default['rasca']['alarmdir']="/var/lib/modularit/alarms"

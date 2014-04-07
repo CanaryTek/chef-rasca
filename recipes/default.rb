@@ -40,7 +40,7 @@ gem_package("rasca") do
 end
 
 ## Rasca Emergency alarm links
-["HostChk", "ProcChk", "DfChk"].each do |check|
+["HostChk", "ProcChk", "DfChk","CheckPing"].each do |check|
   rasca_check check do
     priority "Emergency"
   end

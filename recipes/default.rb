@@ -74,6 +74,15 @@ rasca_object "GitChk" do
 EOF
 end
 
+# ohai plugin to export rasca data
+cookbook_file "#{node['chef_packages']['ohai']['ohai_root']}/plugins/rasca.rb" do
+  source "ohai_rasca.rb"
+  owner "root"
+  group "root"
+  mode 00755
+  action :create
+end
+
 #
 ## Rasca scheduler
 # FIXME: move this to gem 

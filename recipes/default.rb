@@ -23,7 +23,7 @@
 ## Needed packages
 [ "ruby", "rubygems", "git", "crontabs"].each do |pkg|
   package pkg do
-    action :upgrade
+    action :install
   end
 end
 

@@ -113,23 +113,10 @@ template "#{@confdir}/rasca.cfg" do
   action :create
 end
 
-## nsca package
-package "nsca-client"
-
-## nsca config
-file "#{@confdir}/send_nsca.cfg" do
-  content <<EOF
-####################################################
-## Sample NSCA Client Config File 
-#
-# ENCRYPTION PASSWORD
-#password=
-
-# ENCRYPTION METHOD
-#       1 = Simple XOR  (No security, just obfuscation, but very fast)
-encryption_method=1
-EOF
-  mode "0644"
+if node['platform_family'] == "rhel" and node['platform_version'].to_i >= 7
+  include_recipe "rasca::nsca_ng_client"
+else
+  include_recipe "rasca::nsca_client"
 end
 
 ## rasca cron jobs

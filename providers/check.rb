@@ -39,7 +39,11 @@ action :add do
   unless ::File.exists?("#{dir_name}/#{link_name}")
     Chef::Log.info "Linking #{dir_name}/#{link_name} to /usr/bin/rascaCheck"
     link "#{dir_name}/#{link_name}" do
-      to "/usr/bin/rascaCheck"
+      if ::File.exists?("/usr/local/bin/rascaCheck")
+        to "/usr/local/bin/rascaCheck"
+      else
+        to "/usr/bin/rascaCheck"
+      end
     end
   end
 end

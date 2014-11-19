@@ -23,7 +23,7 @@
 ## Needed packages
 [ "ruby", "rubygems", "git", "crontabs"].each do |pkg|
   package pkg do
-    action :upgrade
+    action :install
   end
 end
 
@@ -40,7 +40,7 @@ gem_package("rasca") do
 end
 
 ## Rasca Emergency alarm links
-["HostChk", "ProcChk", "DfChk"].each do |check|
+["HostChk", "ProcChk", "DfChk","CheckPing"].each do |check|
   rasca_check check do
     priority "Emergency"
   end
@@ -74,6 +74,15 @@ rasca_object "GitChk" do
 EOF
 end
 
+# ohai plugin to export rasca data
+cookbook_file "#{node['chef_packages']['ohai']['ohai_root']}/plugins/rasca.rb" do
+  source "ohai_rasca.rb"
+  owner "root"
+  group "root"
+  mode 00755
+  action :create
+end
+
 #
 ## Rasca scheduler
 # FIXME: move this to gem 
@@ -104,23 +113,10 @@ template "#{@confdir}/rasca.cfg" do
   action :create
 end
 
-## nsca package
-package "nsca-client"
-
-## nsca config
-file "#{@confdir}/send_nsca.cfg" do
-  content <<EOF
-####################################################
-## Sample NSCA Client Config File 
-#
-# ENCRYPTION PASSWORD
-#password=
-
-# ENCRYPTION METHOD
-#       1 = Simple XOR  (No security, just obfuscation, but very fast)
-encryption_method=1
-EOF
-  mode "0644"
+if node['platform_family'] == "rhel" and node['platform_version'].to_i >= 7
+  include_recipe "rasca::nsca_ng_client"
+else
+  include_recipe "rasca::nsca_client"
 end
 
 ## rasca cron jobs

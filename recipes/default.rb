@@ -122,15 +122,15 @@ end
 ## rasca cron jobs
 cron "rasca-Emergency" do
   minute "*/5"
-  command '/bin/bash -l -c "/usr/sbin/rasca_scheduler Emergency"'
+  command '/bin/bash -l -c "/usr/sbin/rasca_scheduler Emergency" > /dev/null 2>&1'
 end
 cron "rasca-Urgent" do
   minute "15"
-  command '/bin/bash -l -c "/usr/sbin/rasca_scheduler Urgent"'
+  command '/bin/bash -l -c "/usr/sbin/rasca_scheduler Urgent" > /dev/null 2>&1'
 end
 cron "rasca-Warning" do
   hour "2"
   minute "30"
-  command '/bin/bash -l -c "/usr/sbin/rasca_scheduler Warning"'
+  command '/bin/bash -l -c "/usr/sbin/rasca_scheduler Warning" > /dev/null 2>&1'
 end
 

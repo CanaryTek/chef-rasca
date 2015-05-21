@@ -1,22 +1,35 @@
 # Plugin to export rasca alarms data
-#
 
-provides "rasca_status"
+require 'ffi_yajl'
 
-# Data directory for Rasca
-DATADIR="/var/lib/modularit/data"
+Ohai.plugin(:Rasca) do
+  provides "rasca_status"
 
-rasca_status Mash.new
+  collect_data do
+    # Data directory for Rasca
+    DATADIR="/var/lib/modularit/data"
 
-Dir.glob("#{DATADIR}/*").each do |dir|
-  alert=File.basename(dir)
-  rasca_status[alert]=Mash.new
-  Dir.glob("#{dir}/*.json").each do |file|
-    str=File.read(file)
-    entry=File.basename(file).gsub(/\.json$/,"")
-    unless str.empty?
-      rasca_status[alert][entry]=JSON.parse(str,:symbolize_names => true)
-      rasca_status[alert][entry][:ctime]=File.stat(file).ctime
+    rasca_status Mash.new
+
+    Dir.glob("#{DATADIR}/*").each do |dir|
+      alert=File.basename(dir)
+      rasca_status[alert]=Mash.new
+      Dir.glob("#{dir}/*.json").each do |file|
+        str=File.read(file)
+        entry=File.basename(file).gsub(/\.json$/,"")
+        unless str.empty?
+          begin
+            json_parser = FFI_Yajl::Parser.new
+            hash = json_parser.parse(str)
+            rasca_status[alert][entry] = hash || Mash.new
+            # should exist because the file did, even if it didn't
+            # contain anything
+            rasca_status[alert][entry][:ctime]=File.stat(file).ctime
+          rescue FFI_Yajl::ParseError => e
+            Ohai::Log.error("Could not parse hint file at #{filename}: #{e.message}")
+          end
+        end
+      end
     end
   end
 end

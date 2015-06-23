@@ -21,7 +21,7 @@
 @confdir=node["rasca"]["confdir"]
 
 ## Needed packages
-[ "ruby", "rubygems", "git", "crontabs"].each do |pkg|
+node['rasca']['packages'].each do |pkg|
   package pkg do
     action :install
   end
@@ -103,6 +103,15 @@ directory @confdir do
   action :create
 end
 
+## Lock dir for alarms
+directory "/var/lock/subsys" do
+  owner "root"
+  group "root"
+  mode 00755
+  recursive true
+  action :create
+end
+
 ## Rasca config
 template "#{@confdir}/rasca.cfg" do
   source "rasca.cfg.erb"
@@ -122,15 +131,15 @@ end
 ## rasca cron jobs
 cron "rasca-Emergency" do
   minute "*/5"
-  command '/bin/bash -l -c "/usr/sbin/rasca_scheduler Emergency" > /dev/null 2>&1'
+  command '/bin/bash -l -c "rasca_scheduler Emergency" > /dev/null 2>&1'
 end
 cron "rasca-Urgent" do
   minute "15"
-  command '/bin/bash -l -c "/usr/sbin/rasca_scheduler Urgent" > /dev/null 2>&1'
+  command '/bin/bash -l -c "rasca_scheduler Urgent" > /dev/null 2>&1'
 end
 cron "rasca-Warning" do
   hour "2"
   minute "30"
-  command '/bin/bash -l -c "/usr/sbin/rasca_scheduler Warning" > /dev/null 2>&1'
+  command '/bin/bash -l -c "rasca_scheduler Warning" > /dev/null 2>&1'
 end
 

@@ -10,6 +10,16 @@ default['nagios_name']=Chef::Config[:node_name]
 default['rasca']['gemrepo']="http://gems.canarytek.com/"
 default['rasca']['gem_version']="0.1.29"
 
+# Packages
+case node['platform_family']
+when 'debian'
+  default['rasca']['packages'] = [ "ruby", "rubygems", "git", "lsof", "lvm2" ]
+when 'rhel', 'fedora'
+  default['rasca']['packages'] = [ "ruby", "rubygems", "git", "crontabs", "lsof" ]
+else
+  default['rasca']['packages'] = [ "ruby", "rubygems", "git", "crontabs", "lsof" ]
+end
+
 # ModularIT directories
 default['rasca']['alarmdir']="/var/lib/modularit/alarms"
 default['rasca']['objdir']="/var/lib/modularit/obj"

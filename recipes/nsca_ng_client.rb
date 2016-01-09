@@ -18,15 +18,11 @@
 # limitations under the License.
 
 # Icinga repo
-yum_key "RPM-GPG-KEY-Icinga" do
-  url "http://packages.icinga.org/icinga.key"
-  action :add
-end
 yum_repository "icinga" do
   description "Icinga (Nagios) repo for RHEL/CentOS"
   url "http://packages.icinga.org/epel/$releasever/release/"
-  key "RPM-GPG-KEY-Icinga"
-  enabled "1"
+  gpgkey "http://packages.icinga.org/icinga.key"
+  enabled true
   priority "5"
   action :add
 end

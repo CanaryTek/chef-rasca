@@ -14,6 +14,8 @@ default['rasca']['gem_version']="0.1.29"
 case node['platform_family']
 when 'debian'
   default['rasca']['packages'] = [ "ruby", "rubygems", "git", "lsof", "lvm2" ]
+when 'suse'
+  default['rasca']['packages'] = [ "ruby", "rubygems", "git", "cronie", "lsof" ]
 when 'rhel', 'fedora'
   default['rasca']['packages'] = [ "ruby", "rubygems", "git", "crontabs", "lsof" ]
 else

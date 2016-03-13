@@ -122,7 +122,7 @@ template "#{@confdir}/rasca.cfg" do
   action :create
 end
 
-if node['platform_family'] == "rhel" and node['platform_version'].to_i >= 7
+if (node['platform'] == "rhel" or node['platform'] == "centos") and node['platform_version'].to_i >= 7
   include_recipe "rasca::nsca_ng_client"
 else
   include_recipe "rasca::nsca_client"

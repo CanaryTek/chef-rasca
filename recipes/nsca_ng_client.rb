@@ -17,6 +17,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+if node['platform'] == "centos" or node['platform'] == "rhel"
+
 # Icinga repo
 yum_repository "icinga" do
   description "Icinga (Nagios) repo for RHEL/CentOS"
@@ -37,3 +39,4 @@ template "/etc/modularit/send_nsca.cfg" do
   mode 0600
 end
 
+end

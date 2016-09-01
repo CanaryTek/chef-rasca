@@ -15,6 +15,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+## nsca-ng remove
+package "nsca-ng-client" do
+  action :remove
+end
+
 ## nsca package
 package "nsca-client"
 

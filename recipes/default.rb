@@ -122,11 +122,11 @@ template "#{@confdir}/rasca.cfg" do
   action :create
 end
 
-if (node['platform'] == "rhel" or node['platform'] == "centos") and node['platform_version'].to_i >= 7
-  include_recipe "rasca::nsca_ng_client"
-else
+#if (node['platform'] == "rhel" or node['platform'] == "centos") and node['platform_version'].to_i >= 7
+#  include_recipe "rasca::nsca_ng_client"
+#else
   include_recipe "rasca::nsca_client"
-end
+#end
 
 ## rasca cron jobs
 cron "rasca-Emergency" do
